@@ -4,6 +4,11 @@ import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { getPublicVideoUrl, videoFiles } from '@/lib/videoUtils';
+import DisplayCards from '@/components/ui/display-cards';
+import ReviewSection from '@/components/ReviewSection';
+import FAQSection from '@/components/FAQSection';
+import PricingSection from '@/components/PricingSection';
+import ContactSection from '@/components/ContactSection';
 
 export default function Home() {
   const videoRef = useRef(null);
@@ -212,8 +217,8 @@ export default function Home() {
                 className="text-black font-bold hover:text-gray-800 transition-colors"
               >
                 About
-              </a>
-              <a 
+          </a>
+          <a
                 href="/contact" 
                 className="text-black font-bold hover:text-gray-800 transition-colors"
               >
@@ -476,6 +481,38 @@ export default function Home() {
           </div>
     </div>
       </section>
+
+      {/* Fourth Section - Display Cards */}
+      <section className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center py-20">
+        <div className="w-full max-w-6xl px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-5xl font-bold text-gray-900 mb-6">
+              Why Choose <span className="text-green-600">Koott</span>
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Experience the difference with our comprehensive mental wellness platform designed specifically for the Malayali community.
+            </p>
+          </div>
+          
+          <div className="flex justify-center">
+            <div className="w-full max-w-3xl">
+              <DisplayCards />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Fifth Section - Review Section */}
+      <ReviewSection />
+
+      {/* Sixth Section - FAQ Section */}
+      <FAQSection />
+      
+      {/* Seventh Section - Pricing Section */}
+      <PricingSection />
+      
+      {/* Eighth Section - Contact Section */}
+      <ContactSection />
     </main>
   )
 }
