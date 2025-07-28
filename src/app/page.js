@@ -3,11 +3,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { getPublicVideoUrl, videoFiles } from '@/lib/videoUtils';
 
 export default function Home() {
   const videoRef = useRef(null);
   const textSectionRef = useRef(null);
-  const videoList = ['/bubbles.mp4', '/girl.mp4'];
+  const [videoUrls, setVideoUrls] = useState([]);
   const currentVideoIndex = useRef(0);
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [displayedWords, setDisplayedWords] = useState([]);
@@ -90,13 +91,23 @@ export default function Home() {
     };
   }, []);
 
+  // Load video URLs from Supabase
+  useEffect(() => {
+    const loadVideoUrls = () => {
+      const urls = videoFiles.map(file => getPublicVideoUrl(file)).filter(url => url);
+      setVideoUrls(urls);
+    };
+    
+    loadVideoUrls();
+  }, []);
+
   useEffect(() => {
     const video = videoRef.current;
-    if (!video) return;
+    if (!video || videoUrls.length === 0) return;
 
     const playNextVideo = () => {
-      currentVideoIndex.current = (currentVideoIndex.current + 1) % videoList.length;
-      video.src = videoList[currentVideoIndex.current];
+      currentVideoIndex.current = (currentVideoIndex.current + 1) % videoUrls.length;
+      video.src = videoUrls[currentVideoIndex.current];
       video.load();
       video.play().catch(e => console.log('Video play failed:', e));
     };
@@ -104,14 +115,16 @@ export default function Home() {
     video.addEventListener('ended', playNextVideo);
     
     // Start with first video
-    video.src = videoList[0];
-    video.load();
-    video.play().catch(e => console.log('Video play failed:', e));
+    if (videoUrls.length > 0) {
+      video.src = videoUrls[0];
+      video.load();
+      video.play().catch(e => console.log('Video play failed:', e));
+    }
 
     return () => {
       video.removeEventListener('ended', playNextVideo);
     };
-  }, []);
+  }, [videoUrls]);
 
   // Text animation effect - word by word fade-in-up
   useEffect(() => {
