@@ -7,7 +7,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 export default function Home() {
   const videoRef = useRef(null);
   const textSectionRef = useRef(null);
-  const videoList = ['/bubbles.mp4', '/girl.mp4', '/car.mp4'];
+  const videoList = ['/bubbles.mp4', '/girl.mp4'];
   const currentVideoIndex = useRef(0);
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [displayedWords, setDisplayedWords] = useState([]);
