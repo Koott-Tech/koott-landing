@@ -7,11 +7,9 @@ import { getPublicVideoUrl, videoFiles } from '@/lib/videoUtils';
 
 export default function Home() {
   const videoRef = useRef(null);
-  const nextVideoRef = useRef(null);
   const textSectionRef = useRef(null);
   const [videoUrls, setVideoUrls] = useState([]);
   const currentVideoIndex = useRef(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [displayedWords, setDisplayedWords] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
@@ -105,34 +103,17 @@ export default function Home() {
 
   useEffect(() => {
     const video = videoRef.current;
-    const nextVideo = nextVideoRef.current;
-    if (!video || !nextVideo || videoUrls.length === 0) return;
+    if (!video || videoUrls.length === 0) return;
 
     const playNextVideo = () => {
-      setIsTransitioning(true);
-      
-      // Prepare next video
       const nextIndex = (currentVideoIndex.current + 1) % videoUrls.length;
-      nextVideo.src = videoUrls[nextIndex];
-      nextVideo.load();
       
-      // Fade out current video
-      video.style.transition = 'opacity 0.5s ease-in-out';
-      video.style.opacity = '0';
+      // Update current video directly
+      video.src = videoUrls[nextIndex];
+      video.load();
+      video.play().catch(e => console.log('Video play failed:', e));
       
-      // Fade in next video
-      nextVideo.style.transition = 'opacity 0.5s ease-in-out';
-      nextVideo.style.opacity = '1';
-      
-      // After transition, update current video
-      setTimeout(() => {
-        video.src = videoUrls[nextIndex];
-        video.load();
-        video.style.opacity = '1';
-        nextVideo.style.opacity = '0';
-        currentVideoIndex.current = nextIndex;
-        setIsTransitioning(false);
-      }, 500);
+      currentVideoIndex.current = nextIndex;
     };
 
     video.addEventListener('ended', playNextVideo);
@@ -142,12 +123,6 @@ export default function Home() {
       video.src = videoUrls[0];
       video.load();
       video.play().catch(e => console.log('Video play failed:', e));
-      
-      // Prepare next video
-      if (videoUrls.length > 1) {
-        nextVideo.src = videoUrls[1];
-        nextVideo.load();
-      }
     }
 
     return () => {
@@ -210,16 +185,8 @@ export default function Home() {
           ref={videoRef}
           muted
           playsInline
+          preload="auto"
           className="absolute inset-0 w-full h-full object-cover"
-          style={{ opacity: 1, transition: 'opacity 0.5s ease-in-out' }}
-        >
-        </video>
-        <video
-          ref={nextVideoRef}
-          muted
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover"
-          style={{ opacity: 0, transition: 'opacity 0.5s ease-in-out' }}
         >
         </video>
 
