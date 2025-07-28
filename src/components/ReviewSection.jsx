@@ -65,8 +65,8 @@ const secondColumn = testimonials.slice(3, 6);
 const thirdColumn = testimonials.slice(6, 9);
 
 export default function ReviewSection() {
-  return (
-    <section className="bg-gradient-to-br from-blue-50 to-indigo-100 my-20 relative">
+  	return (
+		<section className="bg-gradient-to-br from-blue-50 to-indigo-100 relative">
       <div className="container z-10 mx-auto px-4 py-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

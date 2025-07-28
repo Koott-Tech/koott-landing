@@ -9,6 +9,7 @@ import ReviewSection from '@/components/ReviewSection';
 import FAQSection from '@/components/FAQSection';
 import PricingSection from '@/components/PricingSection';
 import ContactSection from '@/components/ContactSection';
+import FooterSection from '@/components/FooterSection';
 
 export default function Home() {
   const videoRef = useRef(null);
@@ -513,6 +514,9 @@ export default function Home() {
       
       {/* Eighth Section - Contact Section */}
       <ContactSection />
+      
+      {/* Footer */}
+      <FooterSection />
     </main>
   )
 }
