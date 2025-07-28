@@ -7,9 +7,11 @@ import { getPublicVideoUrl, videoFiles } from '@/lib/videoUtils';
 
 export default function Home() {
   const videoRef = useRef(null);
+  const nextVideoRef = useRef(null);
   const textSectionRef = useRef(null);
   const [videoUrls, setVideoUrls] = useState([]);
   const currentVideoIndex = useRef(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [displayedWords, setDisplayedWords] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
@@ -103,13 +105,34 @@ export default function Home() {
 
   useEffect(() => {
     const video = videoRef.current;
-    if (!video || videoUrls.length === 0) return;
+    const nextVideo = nextVideoRef.current;
+    if (!video || !nextVideo || videoUrls.length === 0) return;
 
     const playNextVideo = () => {
-      currentVideoIndex.current = (currentVideoIndex.current + 1) % videoUrls.length;
-      video.src = videoUrls[currentVideoIndex.current];
-      video.load();
-      video.play().catch(e => console.log('Video play failed:', e));
+      setIsTransitioning(true);
+      
+      // Prepare next video
+      const nextIndex = (currentVideoIndex.current + 1) % videoUrls.length;
+      nextVideo.src = videoUrls[nextIndex];
+      nextVideo.load();
+      
+      // Fade out current video
+      video.style.transition = 'opacity 0.5s ease-in-out';
+      video.style.opacity = '0';
+      
+      // Fade in next video
+      nextVideo.style.transition = 'opacity 0.5s ease-in-out';
+      nextVideo.style.opacity = '1';
+      
+      // After transition, update current video
+      setTimeout(() => {
+        video.src = videoUrls[nextIndex];
+        video.load();
+        video.style.opacity = '1';
+        nextVideo.style.opacity = '0';
+        currentVideoIndex.current = nextIndex;
+        setIsTransitioning(false);
+      }, 500);
     };
 
     video.addEventListener('ended', playNextVideo);
@@ -119,6 +142,12 @@ export default function Home() {
       video.src = videoUrls[0];
       video.load();
       video.play().catch(e => console.log('Video play failed:', e));
+      
+      // Prepare next video
+      if (videoUrls.length > 1) {
+        nextVideo.src = videoUrls[1];
+        nextVideo.load();
+      }
     }
 
     return () => {
@@ -182,6 +211,15 @@ export default function Home() {
           muted
           playsInline
           className="absolute inset-0 w-full h-full object-cover"
+          style={{ opacity: 1, transition: 'opacity 0.5s ease-in-out' }}
+        >
+        </video>
+        <video
+          ref={nextVideoRef}
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ opacity: 0, transition: 'opacity 0.5s ease-in-out' }}
         >
         </video>
 
@@ -192,25 +230,25 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Glassy Navbar */}
+                {/* Glassy Navbar */}
         <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-10">
           <div className="bg-white/20 backdrop-blur-sm rounded-[15px] px-8 py-4 shadow-2xl shadow-black/50">
             <div className="flex items-center space-x-8">
               <a 
                 href="/booking" 
-                className="text-white font-bold hover:text-gray-200 transition-colors"
+                className="text-black font-bold hover:text-gray-800 transition-colors"
               >
                 Book
               </a>
               <a 
                 href="/about" 
-                className="text-white font-bold hover:text-gray-200 transition-colors"
+                className="text-black font-bold hover:text-gray-800 transition-colors"
               >
                 About
-          </a>
-          <a
+              </a>
+              <a 
                 href="/contact" 
-                className="text-white font-bold hover:text-gray-200 transition-colors"
+                className="text-black font-bold hover:text-gray-800 transition-colors"
               >
                 Contact
               </a>
