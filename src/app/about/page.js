@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function About() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100">
@@ -22,11 +24,11 @@ export default function About() {
             <p className="text-lg text-gray-600 mb-6">
               Our platform combines cutting-edge technology with user-centered design to create an 
               experience that exceeds expectations. From small businesses to large enterprises, 
-              we've helped thousands of organizations streamline their operations.
+              we&apos;ve helped thousands of organizations streamline their operations.
             </p>
             <p className="text-lg text-gray-600">
               Today, we continue to push boundaries and explore new possibilities, always keeping 
-              our customers' needs at the heart of everything we do.
+              our customers&apos; needs at the heart of everything we do.
             </p>
           </div>
           <div className="bg-white rounded-lg shadow-lg p-8">
@@ -103,18 +105,18 @@ export default function About() {
         </div>
 
         <div className="text-center">
-          <a 
+          <Link 
             href="/booking" 
             className="inline-block bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors mr-4"
           >
             Get Started
-          </a>
-          <a 
+          </Link>
+          <Link 
             href="/" 
             className="inline-block bg-gray-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-gray-700 transition-colors"
           >
             Back to Home
-          </a>
+          </Link>
         </div>
       </div>
     </main>

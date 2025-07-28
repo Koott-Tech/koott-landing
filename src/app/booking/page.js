@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function Booking() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100">
@@ -140,12 +142,12 @@ export default function Booking() {
               </div>
 
               <div className="flex items-center justify-between pt-6">
-                <a 
+                <Link 
                   href="/" 
                   className="text-green-600 hover:text-green-700 font-medium"
                 >
                   ← Back to Home
-                </a>
+                </Link>
                 <button
                   type="submit"
                   className="bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors"
